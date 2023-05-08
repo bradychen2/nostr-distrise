@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { WebSocket } from 'ws';
-import { PublishEventUseCase } from 'server/src/use-cases/client/publish-event-use-case';
+import { PublishEventUseCase } from 'src/use-cases/client/publish-event-use-case';
 
 @Injectable()
 export class SocketClient implements OnModuleInit {
@@ -24,6 +24,6 @@ export class SocketClient implements OnModuleInit {
   private async publishEvent() {
     const event = this.publishEventUseCase.createEvent();
     await this.publishEventUseCase.signEvent(event);
-    await this.socketClient.send('EVENT', ['EVENT', event]);
+    this.socketClient.send(JSON.stringify(['EVENT', event]));
   }
 }

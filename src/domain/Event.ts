@@ -48,6 +48,3 @@ export class Event {
     return hash;
   }
 }
-
-// const id = await utils.sha256(Buffer.from(JSON.stringify(arr)));
-// return Buffer.from(id).toString('hex') === this.id;

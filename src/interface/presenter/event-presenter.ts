@@ -1,4 +1,4 @@
-import { Event } from 'server/src/domain/Event';
+import { Event } from 'src/domain/Event';
 import { EventData, EventDto } from '../dto/Event.dto';
 
 export class EventPresenter {

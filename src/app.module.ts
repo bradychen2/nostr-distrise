@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-// import { GatewayModule } from './gateway/gateway.module';
+import { GatewayModule } from './gateway/gateway.module';
 import { SocketClientModule } from './client/socket-client.module';
 import { ConfigModule } from '@nestjs/config';
 
@@ -9,7 +9,7 @@ import { ConfigModule } from '@nestjs/config';
       isGlobal: true,
     }),
     SocketClientModule,
-    // GatewayModule,
+    GatewayModule,
   ],
 })
 export class AppModule {}

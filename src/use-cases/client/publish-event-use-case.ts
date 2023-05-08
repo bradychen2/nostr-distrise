@@ -1,4 +1,4 @@
-import { Event } from 'server/src/domain/Event';
+import { Event } from 'src/domain/Event';
 
 export class PublishEventUseCase {
   public createEvent() {

@@ -15,7 +15,7 @@ import { EventPresenter } from '../interface/presenter/event-presenter';
 export class EventGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-  @WebSocketServer() wss: Server;
+  @WebSocketServer() wss!: Server;
   constructor(private readonly eventPresenter: EventPresenter) {}
 
   afterInit() {

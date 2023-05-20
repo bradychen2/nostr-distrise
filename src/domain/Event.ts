@@ -12,23 +12,27 @@ export class Event {
   sig: string; // <64-bytes hex of the signature of the sha256 hash of the serialized event data, which is the same as the "id" field>
 
   constructor(
-    event: Pick<Event, 'pubkey' | 'created_at' | 'kind' | 'tags' | 'content'>,
+    event: Pick<Event, 'pubkey' | 'created_at' | 'kind' | 'tags' | 'content'> &
+      Partial<Event>,
   ) {
     this.pubkey = event.pubkey;
     this.created_at = event.created_at;
     this.kind = event.kind;
     this.tags = event.tags;
     this.content = event.content;
-    this.id = this.hash(this.serialize());
-    this.sig = '';
+    this.id = event.id ? event.id : this.hash(this.serialize());
+    this.sig = event.sig ? event.sig : '';
   }
 
   public async sign(privateKey: string): Promise<void> {
     const sig = secp.utils.bytesToHex(
       await secp.schnorr.sign(this.id, privateKey),
     );
-    const isValid = await secp.schnorr.verify(sig, this.id, this.pubkey);
     this.sig = sig.toString();
+  }
+
+  static async validateSignature(event: Event): Promise<boolean> {
+    return await secp.schnorr.verify(event.sig, event.id, event.pubkey);
   }
 
   private serialize(): string {

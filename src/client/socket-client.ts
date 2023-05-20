@@ -22,8 +22,16 @@ export class SocketClient implements OnModuleInit {
   }
 
   private async publishEvent() {
-    const event = this.publishEventUseCase.createEvent();
-    await this.publishEventUseCase.signEvent(event);
-    this.socketClient.send(JSON.stringify(['EVENT', event]));
+    try {
+      const event = await this.publishEventUseCase.publishEvent();
+      console.log('published event: ', JSON.stringify(event));
+      this.socketClient.send(JSON.stringify(['EVENT', event]));
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      } else {
+        throw new Error(`Error publishing event: ${error}`);
+      }
+    }
   }
 }

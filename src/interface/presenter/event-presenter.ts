@@ -1,3 +1,4 @@
+import { MsgType } from 'src/domain/constant';
 import { Event } from '../../domain/Event';
 import { EventDto } from '../dto/Event.dto';
 
@@ -19,7 +20,7 @@ export class EventPresenter {
 
   entityToDto(event: Event): EventDto {
     return [
-      'EVENT',
+      MsgType.EVENT,
       {
         id: event.id,
         pubkey: event.pubkey,

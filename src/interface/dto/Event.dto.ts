@@ -1,3 +1,5 @@
+import { MsgType } from 'src/domain/constant';
+
 export class EventDetail {
   id!: string;
   pubkey!: string;
@@ -8,4 +10,4 @@ export class EventDetail {
   sig!: string;
 }
 
-export type EventDto = ['EVENT', EventDetail];
+export type EventDto = [MsgType.EVENT, EventDetail];

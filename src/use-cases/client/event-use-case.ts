@@ -3,7 +3,7 @@ import { Event } from 'src/domain/Event';
 import { IDataServices } from 'src/framework/data-services/abstract/data-services.abstract';
 
 @Injectable()
-export class PublishEventUseCase {
+export class EventUseCase {
   constructor(private dataServices: IDataServices) {}
 
   private async signEvent(event: Event): Promise<Event> {
@@ -31,6 +31,19 @@ export class PublishEventUseCase {
         throw error;
       }
       throw new Error(`Error creating event: ${error}`);
+    }
+  }
+
+  public async receiveEvent(event: Event): Promise<Event> {
+    try {
+      await this.dataServices.event.create(event);
+      return event;
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log(error.message);
+        throw error;
+      }
+      throw new Error(`Error receiving event: ${error}`);
     }
   }
 }

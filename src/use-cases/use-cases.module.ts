@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { PublishEventUseCase } from './client/publish-event-use-case';
+import { EventUseCase } from './client/event-use-case';
 import { DataServicesModule } from 'src/framework/data-services/data-services.module';
 import { ReqUseCase } from './client/request-use-case';
 
 @Module({
   imports: [DataServicesModule],
   controllers: [],
-  providers: [PublishEventUseCase, ReqUseCase],
-  exports: [PublishEventUseCase, ReqUseCase],
+  providers: [EventUseCase, ReqUseCase],
+  exports: [EventUseCase, ReqUseCase],
 })
 export class UseCaseModule {}

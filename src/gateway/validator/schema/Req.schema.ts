@@ -1,4 +1,5 @@
 import * as Joi from 'joi';
+import { MsgType } from 'src/domain/constant';
 
 export const FilterSchema = Joi.object({
   ids: Joi.array()
@@ -19,7 +20,7 @@ export const FilterSchema = Joi.object({
 
 export const ReqSchema = Joi.array()
   .ordered(
-    Joi.string().allow('REQ').required(),
+    Joi.string().valid(MsgType.REQ).required(),
     Joi.string()
       .length(64)
       .regex(/^[0-9a-f]+$/)

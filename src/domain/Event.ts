@@ -35,6 +35,11 @@ export class Event {
     return await secp.schnorr.verify(event.sig, event.id, event.pubkey);
   }
 
+  static async validateId(event: Event): Promise<boolean> {
+    const id = event.hash(event.serialize());
+    return id === event.id;
+  }
+
   private serialize(): string {
     const data = [
       0,

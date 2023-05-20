@@ -1,4 +1,5 @@
 import * as Joi from 'joi';
+import { MsgType } from 'src/domain/constant';
 
 const hexStrRegex = /^[0-9a-f]+$/;
 
@@ -13,5 +14,5 @@ export const EventDetailSchema = Joi.object({
 });
 
 export const EventSchema = Joi.array()
-  .ordered(Joi.string().allow('EVENT').required())
+  .ordered(Joi.string().valid(MsgType.EVENT).required())
   .items(EventDetailSchema.required());

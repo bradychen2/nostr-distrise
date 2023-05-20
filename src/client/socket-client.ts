@@ -1,12 +1,13 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { WebSocket } from 'ws';
-import { PublishEventUseCase } from 'src/use-cases/client/publish-event-use-case';
+import { EventUseCase } from 'src/use-cases/client/event-use-case';
+import { MsgType } from 'src/domain/constant';
 
 @Injectable()
 export class SocketClient implements OnModuleInit {
   public socketClient: WebSocket;
 
-  constructor(private readonly publishEventUseCase: PublishEventUseCase) {
+  constructor(private readonly publishEventUseCase: EventUseCase) {
     this.socketClient = new WebSocket(`${process.env.TEST_RELAY_URL}`);
   }
 
@@ -25,7 +26,7 @@ export class SocketClient implements OnModuleInit {
     try {
       const event = await this.publishEventUseCase.publishEvent();
       console.log('published event: ', JSON.stringify(event));
-      this.socketClient.send(JSON.stringify(['EVENT', event]));
+      this.socketClient.send(JSON.stringify([MsgType.EVENT, event]));
     } catch (error) {
       if (error instanceof Error) {
         console.error(error.message);

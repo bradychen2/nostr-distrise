@@ -1,3 +1,5 @@
+import { MsgType } from 'src/domain/constant';
+
 export class FilterDto {
   ids: string[] = []; // <a list of event ids or prefixes>,
   authors: string[] = []; // <a list of pubkeys or prefixes, the pubkey of an event must be one of these>,
@@ -9,4 +11,4 @@ export class FilterDto {
   limit = 200; // <maximum number of events to be returned in the initial query>
 }
 
-export type ReqDto = ['REQ', string, ...FilterDto[]];
+export type ReqDto = [MsgType.REQ, string, ...FilterDto[]];

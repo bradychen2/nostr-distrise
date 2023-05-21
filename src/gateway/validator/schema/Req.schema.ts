@@ -21,9 +21,6 @@ export const FilterSchema = Joi.object({
 export const ReqSchema = Joi.array()
   .ordered(
     Joi.string().valid(MsgType.REQ).required(),
-    Joi.string()
-      .length(64)
-      .regex(/^[0-9a-f]+$/)
-      .required(),
+    Joi.string().max(128).required(),
   )
   .items(FilterSchema.optional());

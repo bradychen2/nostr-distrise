@@ -31,8 +31,8 @@ export class EventGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
   wss!: WebSocketServer;
-  clients: Map<WebSocket, string> = new Map();
-  subscribers: Map<string, WebSocket> = new Map(); // <subscription_id, client>
+  clients: Map<WebSocket, string> = new Map(); // <client, client_id>
+  subscribers: Map<WebSocket, string> = new Map(); // <client, subscription_id>
   constructor(
     private readonly eventPresenter: EventPresenter,
     private readonly reqPresenter: ReqPresenter,
@@ -53,6 +53,7 @@ export class EventGateway
 
   handleDisconnect(client: WebSocket) {
     const clientId = this.clients.get(client);
+    this.subscribers.delete(client);
     this.clients.delete(client);
     console.log(`Client disconnected: ${clientId}`);
   }
@@ -78,7 +79,7 @@ export class EventGateway
       console.log('received event: ', JSON.stringify(eventEntity));
       // send event to all subscribers
       const eventDetails = eventDto[1];
-      for (const [subscription_id, client] of this.subscribers) {
+      for (const [client, subscription_id] of this.subscribers) {
         const serverSideEvent = [MsgType.EVENT, subscription_id, eventDetails];
         await client.send(JSON.stringify(serverSideEvent));
         const clientId = this.clients.get(client);
@@ -100,7 +101,7 @@ export class EventGateway
     console.log('received req: ', JSON.stringify(reqEntity));
     // set client as subscriber
     const { subscription_id } = reqEntity;
-    this.subscribers.set(subscription_id, client);
+    this.subscribers.set(client, subscription_id);
     // send all events to client
     const events: Event[] = await this.reqUseCase.getAllEvents();
     for (const event of events) {
@@ -121,7 +122,7 @@ export class EventGateway
     @MessageBody(new CloseValidatorPipe()) closeDto: CloseDto,
   ): Promise<void> {
     const subscription_id = closeDto[1];
-    if (this.subscribers.delete(subscription_id)) {
+    if (this.subscribers.delete(client)) {
       const clientId = this.clients.get(client);
       console.log(
         `Client unsubscribed: ${clientId}, subscription-id: ${subscription_id}`,
